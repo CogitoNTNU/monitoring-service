@@ -1,0 +1,24 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch: {}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+            docker network create proxy || true
+            docker compose build
+            docker compose up -d
+            docker compose down
+
+      
